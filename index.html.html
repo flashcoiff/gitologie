@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suivi gîtologie — 6GLG487</title>
+<meta name="theme-color" content="#17242B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Gîtologie">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2317242B'/%3E%3Cpolyline points='18,68 38,50 55,60 82,28' fill='none' stroke='%23C9962B' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2317242B'/%3E%3Cpolyline points='18,68 38,50 55,60 82,28' fill='none' stroke='%23C9962B' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17242B; --ink-2:#4A5A63; --stone:#EDF0F2; --paper:#FFFFFF; --line:#D6DDE1;
+  --gold:#C9962B; --gold-soft:#FBF3DF; --up:#1E7B4F; --down:#B33A2E; --up-soft:#E4F3EA; --down-soft:#F9E5E2;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--stone);color:var(--ink);font-family:"Manrope",system-ui,sans-serif;font-size:16px;line-height:1.45}
+button,input,textarea,select{font:inherit;color:inherit}
+h1,h2,h3{margin:0;line-height:1.2}
+h1{font-size:22px;font-weight:800}
+h2{font-size:18px;font-weight:700}
+h3{font-size:15px;font-weight:700}
+p{margin:0}
+a{color:var(--ink)}
+.app{max-width:640px;margin:0 auto;min-height:100dvh;padding-bottom:84px}
+header{padding:18px 18px 10px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+header .sub{font-size:13px;color:var(--ink-2)}
+main{padding:0 14px}
+section.view{display:none}
+section.view.on{display:block}
+.card{background:var(--paper);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--line)}
+.card.flat{background:transparent;border:0;padding:0}
+.hero{background:var(--ink);color:#fff;border:0}
+.hero .label{font-size:13px;opacity:.75}
+.hero .big{font-size:34px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.hero .row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:10px}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.pill.up{background:var(--up-soft);color:var(--up)} .pill.down{background:var(--down-soft);color:var(--down)} .pill.flat{background:var(--stone);color:var(--ink-2)}
+.hero .pill.up{background:rgba(255,255,255,.14);color:#8FE0B4} .hero .pill.down{background:rgba(255,255,255,.14);color:#FFB3A8}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.stat .l{font-size:12px;color:var(--ink-2)} .stat .v{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
+.chart-wrap{margin-top:6px}
+.chart-wrap svg{width:100%;height:auto;display:block;overflow:visible}
+.muted{color:var(--ink-2);font-size:14px}
+.empty{padding:22px 14px;text-align:center;color:var(--ink-2);font-size:14px;border:1px dashed var(--line);border-radius:var(--r)}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:3px solid rgba(201,150,43,.45);outline-offset:1px}
+textarea{min-height:80px;resize:vertical}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 16px;border-radius:10px;border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:700;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.btn.sm{padding:7px 11px;font-size:13px;border-radius:8px}
+.btn.danger{background:transparent;border-color:var(--line);color:var(--down)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.item{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .when{min-width:52px;font-weight:800;font-variant-numeric:tabular-nums}
+.item .body{flex:1;min-width:0}
+.item .t{font-weight:700}
+.item .d{font-size:14px;color:var(--ink-2);white-space:pre-wrap}
+.item .actions{display:flex;flex-direction:column;gap:6px}
+.item .actions button{border:0;background:var(--stone);border-radius:8px;padding:6px 8px;font-size:12px;cursor:pointer}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.check:first-child{border-top:0}
+.check input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--gold)}
+.check .d{font-size:14px;color:var(--ink-2)}
+.due{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line);align-items:center}
+.due:first-child{border-top:0}
+.due .date{min-width:110px;font-weight:700;font-size:14px}
+.due.soon .date{color:var(--gold)}
+.due .d{font-size:14px}
+details summary{cursor:pointer;font-weight:700;padding:8px 0}
+ol,ul{margin:6px 0 0;padding-left:20px}
+li{margin-bottom:4px;font-size:14px}
+.note{background:var(--gold-soft);border:1px solid #EED9A6;border-radius:10px;padding:10px 12px;font-size:14px}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 14px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+nav .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+nav button{border:0;background:transparent;border-radius:10px;padding:8px 2px;font-size:11px;font-weight:700;color:var(--ink-2);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button .ic{font-size:17px;line-height:1}
+nav button.on{background:var(--ink);color:#fff}
+.script{background:var(--stone);border-radius:10px;padding:12px;font-size:14px;white-space:pre-wrap;line-height:1.5}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div>
+    <h1 id="hTitle">Suivi gîtologie</h1>
+    <div class="sub" id="hSub">6GLG487 · Automne 2026</div>
+  </div>
+  <button class="btn ghost sm" id="btnExport" title="Sauvegarder une copie">⤓ Copie</button>
+</header>
+
+<main>
+
+<!-- ACCUEIL -->
+<section class="view on" id="v-accueil">
+  <div id="accueilEmpty" class="empty" style="margin-bottom:12px">Aucune compagnie enregistrée. Va dans <b>Compagnie</b> pour lancer ton projet.<div class="btnrow" style="justify-content:center;margin-top:12px"><button class="btn sm gold" id="btnDemo1">Voir un exemple sur 5 semaines</button></div></div>
+  <div id="accueilBody" style="display:none">
+    <div class="card hero">
+      <div class="label" id="heroName">—</div>
+      <div class="big" id="heroValue">0 $</div>
+      <div class="row">
+        <span class="pill flat" id="heroGain">±0 $</span>
+        <span class="label" id="heroPrice">Dernier prix —</span>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="stat"><div class="l">Actions détenues</div><div class="v" id="stShares">0</div></div>
+      <div class="stat"><div class="l">Investissement initial</div><div class="v">10 000 $</div></div>
+      <div class="stat"><div class="l">Prix de départ (11 sept.)</div><div class="v" id="stStart">—</div></div>
+      <div class="stat"><div class="l">Rendement</div><div class="v" id="stPct">0 %</div></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h2>Valeur de l'investissement</h2>
+      <p class="muted">Semaine par semaine, à partir de 10 000 $</p>
+      <div class="chart-wrap" id="chart"></div>
+    </div>
+    <div class="card">
+      <h2>Prochaine échéance</h2>
+      <div id="nextDue" class="muted">—</div>
+    </div>
+    <div class="card">
+      <h2>Cette semaine</h2>
+      <div id="weekSummary" class="muted">—</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPAGNIE -->
+<section class="view" id="v-compagnie">
+  <div class="card">
+    <h2>Fiche de la compagnie</h2>
+    <p class="muted" style="margin-bottom:12px">C'est le contenu de ta diapositive de lancement (à remettre jeudi 17 sept., 17 h).</p>
+    <div class="field"><label>Nom de la société</label><input id="cName" placeholder="ex. Midland Exploration"></div>
+    <div class="grid2">
+      <div class="field"><label>Code boursier</label><input id="cCode" placeholder="MD – TSX.V"></div>
+      <div class="field"><label>Substances recherchées</label><input id="cSub" placeholder="Or, cuivre…"></div>
+    </div>
+    <div class="field"><label>Projets principaux et localisation au Québec</label><textarea id="cProj" placeholder="ex. Projet X (Abitibi), Projet Y (Baie-James)"></textarea></div>
+    <div class="field"><label>Site web officiel</label><input id="cSite" placeholder="https://…"></div>
+    <div class="field"><label>Rapport 43-101 sur SEDAR+ (oui / non / lien)</label><input id="cSedar" placeholder="Oui — lien"></div>
+    <div class="grid2">
+      <div class="field"><label>Prix de clôture le 11 sept. 2026 ($)</label><input id="cPrice" type="number" step="0.001" min="0" placeholder="0,48"></div>
+      <div class="field"><label>Actions avec 10 000 $</label><input id="cShares" readonly placeholder="calculé"></div>
+    </div>
+    <div class="field"><label>Pourquoi ce choix (motivation pour la présentation finale)</label><textarea id="cWhy" placeholder="Substance qui m'intéresse, projets actifs, contexte géologique…"></textarea></div>
+    <div class="btnrow"><button class="btn gold" id="cSave">Enregistrer la fiche</button></div>
+  </div>
+  <div class="card">
+    <h3>Les 4 critères du prof</h3>
+    <div class="check"><input type="checkbox" data-crit="0"><div><div class="t">Cible une ou plusieurs substances précises</div></div></div>
+    <div class="check"><input type="checkbox" data-crit="1"><div><div class="t">A un site internet officiel</div></div></div>
+    <div class="check"><input type="checkbox" data-crit="2"><div><div class="t">Projets d'exploration actifs au Québec</div></div></div>
+    <div class="check"><input type="checkbox" data-crit="3"><div><div class="t">Rapports techniques 43-101 déposés (idéal)</div></div></div>
+    <div class="check"><input type="checkbox" data-crit="4"><div><div class="t">Choix envoyé au prof par courriel et validé</div><div class="d">Premier arrivé, premier servi</div></div></div>
+  </div>
+</section>
+
+<!-- SUIVI -->
+<section class="view" id="v-suivi">
+  <div class="card">
+    <h2>Évolution du prix de l'action</h2>
+    <p class="muted">Prix de clôture chaque vendredi, et variation en % d'une semaine à l'autre</p>
+    <div class="chart-wrap" id="chartPrice"></div>
+  </div>
+  <div class="card">
+    <h2 id="wFormTitle">Ajouter le prix de la semaine</h2>
+    <div class="grid2">
+      <div class="field"><label>Semaine</label><input id="wNum" type="number" min="1" placeholder="1"></div>
+      <div class="field"><label>Date (vendredi)</label><input id="wDate" type="date"></div>
+    </div>
+    <div class="field"><label>Prix de clôture ($)</label><input id="wPrice" type="number" step="0.001" min="0" placeholder="0,52"></div>
+    <div class="field"><label>Explication du mouvement (géologie, marché, communiqué…)</label><textarea id="wNote" placeholder="ex. Résultats de forage publiés mardi : 12 m à 5 g/t Au → hausse"></textarea></div>
+    <div class="btnrow"><button class="btn" id="wAdd">Ajouter la semaine</button><button class="btn ghost" id="wCancel" style="display:none">Annuler</button></div>
+  </div>
+  <div class="card">
+    <h2>Historique</h2>
+    <div id="weekList"></div>
+  </div>
+</section>
+
+<!-- ANNONCES -->
+<section class="view" id="v-annonces">
+  <div class="note" style="margin-bottom:12px">Chaque communiqué de presse = 1 ou 2 diapos à envoyer au prof avant le <b>jeudi 17 h</b>.</div>
+  <div class="card">
+    <h2 id="nFormTitle">Nouveau communiqué</h2>
+    <div class="grid2">
+      <div class="field"><label>Date</label><input id="nDate" type="date"></div>
+      <div class="field"><label>Effet sur l'action</label>
+        <select id="nImpact"><option value="up">Hausse</option><option value="flat">Neutre</option><option value="down">Baisse</option></select></div>
+    </div>
+    <div class="field"><label>Titre du communiqué</label><input id="nTitle" placeholder="ex. Résultats de forage au projet X"></div>
+    <div class="field"><label>Résumé en 2-3 phrases (pour la diapo)</label><textarea id="nSum" placeholder="Quoi, où, chiffres clés, pourquoi c'est important géologiquement"></textarea></div>
+    <div class="field"><label>Lien</label><input id="nLink" placeholder="https://…"></div>
+    <div class="btnrow"><button class="btn" id="nAdd">Ajouter le communiqué</button><button class="btn ghost" id="nCancel" style="display:none">Annuler</button></div>
+  </div>
+  <div class="card">
+    <h2>Communiqués suivis</h2>
+    <div id="newsList"></div>
+  </div>
+</section>
+
+<!-- VENDREDI -->
+<section class="view" id="v-vendredi">
+  <div class="card">
+    <h2>Rapport oral du vendredi</h2>
+    <p class="muted" style="margin-bottom:10px">Brouillon généré à partir de tes données. Copie-le et ajuste-le.</p>
+    <div class="script" id="script">—</div>
+    <div class="btnrow"><button class="btn sm" id="copyScript">Copier le texte</button></div>
+  </div>
+  <div class="card">
+    <h3>À dire en 1 minute</h3>
+    <ol>
+      <li>Prix cette semaine vs semaine dernière et depuis le début</li>
+      <li>Valeur de mes 10 000 $ maintenant (gain ou perte)</li>
+      <li>Y a-t-il eu un communiqué ? Si oui, quoi et quel effet</li>
+      <li>Le lien géologique : pourquoi le marché a réagi ainsi</li>
+      <li>Ce que j'attends pour la suite (forages, résultats, financement…)</li>
+    </ol>
+  </div>
+  <div class="card">
+    <h3>Vendredis présentés</h3>
+    <div id="fridayList"></div>
+    <div class="btnrow"><button class="btn sm ghost" id="fAdd">Marquer ce vendredi comme présenté</button></div>
+  </div>
+</section>
+
+<!-- CONSIGNES -->
+<section class="view" id="v-consignes">
+  <div class="card">
+    <h2>Échéances</h2>
+    <div id="dueList"></div>
+  </div>
+  <div class="card">
+    <h2>Ce que le prof demande</h2>
+    <details open><summary>Phase 1 — Lancement (diapo unique)</summary>
+      <ol>
+        <li>Nom de la société et substances recherchées</li>
+        <li>Projet(s) principal(aux) et localisation au Québec</li>
+        <li>Prix de clôture de l'action le vendredi 11 sept. 2026 (après 16 h)</li>
+        <li>Nombre d'actions pour 10 000 $ (10 000 ÷ prix, arrondi vers le bas)</li>
+      </ol>
+      <p class="muted" style="margin-top:8px">Choix à coordonner avec les autres, validé par courriel au prof. Premier arrivé, premier servi.</p>
+    </details>
+    <details><summary>Phase 2 — Suivi hebdomadaire</summary>
+      <ul>
+        <li>Chaque vendredi en classe : rapport oral sur les performances ou difficultés, basé sur les communiqués officiels</li>
+        <li>Si un communiqué est publié : 1 ou 2 diapos synthèses au prof avant le jeudi 17 h</li>
+      </ul>
+    </details>
+    <details><summary>Phase finale — Présentation de 10 minutes</summary>
+      <ul>
+        <li>Motivations initiales du choix</li>
+        <li>Description des projets d'exploration</li>
+        <li>Aspects géologiques</li>
+        <li>Stratégie adoptée par la compagnie</li>
+        <li>Modèle gîtologique</li>
+        <li>Résultats financiers obtenus durant l'automne</li>
+      </ul>
+      <p class="muted" style="margin-top:8px">Évaluée par les pairs, les enseignants et des géologues de Laurentia Exploration. Bourses de 750 $ et 250 $ pour les deux meilleures (cours de gîtologie validé requis).</p>
+    </details>
+  </div>
+  <div class="card">
+    <h2>Préparation de la présentation finale</h2>
+    <p class="muted" style="margin-bottom:6px">Coche au fur et à mesure que la section est prête.</p>
+    <div id="finalChecks"></div>
+  </div>
+  <div class="card">
+    <h3>Données</h3>
+    <div class="btnrow">
+      <button class="btn sm ghost" id="btnDemo2">Charger l'exemple fictif</button>
+      <button class="btn sm ghost" id="btnImport">Restaurer une copie</button>
+      <button class="btn sm danger" id="btnReset">Tout effacer</button>
+    </div>
+    <input type="file" id="fileImport" accept="application/json" style="display:none">
+  </div>
+</section>
+
+</main>
+</div>
+
+<nav><div class="in">
+  <button data-v="accueil" class="on"><span class="ic">◆</span>Accueil</button>
+  <button data-v="compagnie"><span class="ic">⛏</span>Compagnie</button>
+  <button data-v="suivi"><span class="ic">↗</span>Suivi</button>
+  <button data-v="annonces"><span class="ic">✦</span>Annonces</button>
+  <button data-v="vendredi"><span class="ic">▶</span>Vendredi</button>
+  <button data-v="consignes"><span class="ic">☰</span>Consignes</button>
+</div></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY='gitologie:state';
+const INVEST=10000;
+const FINAL_SECTIONS=[
+  ['Motivations du choix','Pourquoi cette compagnie, cette substance'],
+  ['Description des projets','Nom, localisation, stade (grassroots, forage, ressource…)'],
+  ['Aspects géologiques','Contexte régional, lithologies, structures, minéralisation'],
+  ['Stratégie de la compagnie','Exploration, acquisition, financement, partenariats'],
+  ['Modèle gîtologique','Type de gisement visé et pourquoi il s\'applique'],
+  ['Résultats financiers','Évolution du prix, valeur finale des 10 000 $, événements clés'],
+];
+const DUES=[
+  ['2026-09-17','Diapo de lancement au prof (17 h)'],
+  ['2026-09-18','Premier rapport oral du vendredi'],
+  ['weekly','Chaque jeudi 17 h : diapos si communiqué · Chaque vendredi : rapport oral'],
+  ['tbd','Fin de session : présentation finale de 10 min (date à confirmer)'],
+];
+
+let state=blank();
+function blank(){return {company:{},crit:[false,false,false,false,false],weeks:[],news:[],fridays:[],finalDone:FINAL_SECTIONS.map(()=>false)};}
+
+/* ---------- storage ---------- */
+// Sauvegarde dans le navigateur du téléphone (localStorage). Si l'app est ouverte dans Claude, window.storage est utilisé.
+const hasStore=()=>typeof window.storage!=='undefined';
+async function load(){
+  try{
+    if(hasStore()){const r=await window.storage.get(KEY,false); if(r&&r.value) state=Object.assign(blank(),JSON.parse(r.value));}
+    else{const r=localStorage.getItem(KEY); if(r) state=Object.assign(blank(),JSON.parse(r));}
+  }catch(e){}
+}
+async function save(msg){
+  try{
+    if(hasStore()) await window.storage.set(KEY,JSON.stringify(state),false);
+    else localStorage.setItem(KEY,JSON.stringify(state));
+  }catch(e){toast('Sauvegarde impossible');return;}
+  if(msg) toast(msg);
+}
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const money=n=>(Math.round(n)).toLocaleString('fr-CA')+' $';
+const price=n=>n==null||isNaN(n)?'—':Number(n).toLocaleString('fr-CA',{minimumFractionDigits:2,maximumFractionDigits:3})+' $';
+const dateFr=s=>s?new Date(s+'T12:00:00').toLocaleDateString('fr-CA',{day:'numeric',month:'short'}):'';
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),1800);}
+const shares=()=>state.company.price>0?Math.floor(INVEST/state.company.price):0;
+function series(){
+  const pts=[];
+  if(state.company.price>0) pts.push({label:'S0',price:Number(state.company.price),date:'2026-09-11'});
+  [...state.weeks].sort((a,b)=>a.week-b.week).forEach(w=>pts.push({label:'S'+w.week,price:Number(w.price),date:w.date,note:w.note}));
+  return pts;
+}
+const lastPrice=()=>{const s=series();return s.length?s[s.length-1].price:null;};
+
+/* ---------- render ---------- */
+function render(){
+  const c=state.company, n=shares(), lp=lastPrice();
+  const has=c.name||c.price;
+  $('#accueilEmpty').style.display=has?'none':'block';
+  $('#accueilBody').style.display=has?'block':'none';
+  $('#hTitle').textContent=c.name||'Suivi gîtologie';
+  $('#hSub').textContent=c.code?c.code+' · '+(c.sub||''):'6GLG487 · Automne 2026';
+  if(has){
+    const val=lp?n*lp:INVEST, gain=val-INVEST;
+    $('#heroName').textContent=(c.name||'')+(c.sub?' · '+c.sub:'');
+    $('#heroValue').textContent=money(val);
+    const g=$('#heroGain'); g.textContent=(gain>=0?'+':'−')+money(Math.abs(gain)); g.className='pill '+(gain>0?'up':gain<0?'down':'flat');
+    $('#heroPrice').textContent='Dernier prix '+price(lp);
+    $('#stShares').textContent=n.toLocaleString('fr-CA');
+    $('#stStart').textContent=price(c.price);
+    $('#stPct').textContent=(gain>=0?'+':'')+(gain/INVEST*100).toFixed(1).replace('.',',')+' %';
+    drawChart();
+    const s=series(); const last=s[s.length-1], prev=s[s.length-2];
+    $('#weekSummary').textContent=prev?`${last.label} : ${price(last.price)} (${last.price>=prev.price?'+':''}${((last.price-prev.price)/prev.price*100).toFixed(1).replace('.',',')} % vs ${prev.label}). ${last.note||'Ajoute une explication dans Suivi.'}`:'Ajoute ta première semaine dans Suivi.';
+  }
+  // company form
+  $('#cName').value=c.name||'';$('#cCode').value=c.code||'';$('#cSub').value=c.sub||'';$('#cProj').value=c.proj||'';
+  $('#cSite').value=c.site||'';$('#cSedar').value=c.sedar||'';$('#cPrice').value=c.price||'';$('#cWhy').value=c.why||'';
+  $('#cShares').value=n?n.toLocaleString('fr-CA'):'';
+  document.querySelectorAll('[data-crit]').forEach(cb=>cb.checked=!!state.crit[cb.dataset.crit]);
+  // weeks
+  const wl=$('#weekList'); const s=series().filter(p=>p.label!=='S0').reverse();
+  wl.innerHTML=s.length?'':'<div class="empty">Aucune semaine encore. Le point S0 est ton prix du 11 septembre.</div>';
+  s.forEach(p=>{
+    const gain=n*p.price-INVEST;
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML=`<div class="when">${p.label}</div><div class="body"><div class="t">${price(p.price)} <span class="pill ${gain>0?'up':gain<0?'down':'flat'}">${gain>=0?'+':'−'}${money(Math.abs(gain))}</span></div><div class="d">${dateFr(p.date)}${p.note?'\n'+esc(p.note):''}</div></div><div class="actions"><button data-editw="${p.label.slice(1)}">Modifier</button><button data-delw="${p.label.slice(1)}">Suppr.</button></div>`;
+    wl.appendChild(d);
+  });
+  drawPriceChart();
+  $('#wNum').placeholder=String((state.weeks.reduce((m,w)=>Math.max(m,w.week),0))+1);
+  // news
+  const nl=$('#newsList'); const news=[...state.news].sort((a,b)=>b.date.localeCompare(a.date));
+  nl.innerHTML=news.length?'':'<div class="empty">Aucun communiqué suivi. Vérifie le site de la compagnie chaque semaine.</div>';
+  news.forEach((x,i)=>{
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML=`<div class="when" style="font-size:13px">${dateFr(x.date)}</div><div class="body"><div class="t">${esc(x.title)} <span class="pill ${x.impact}">${x.impact==='up'?'Hausse':x.impact==='down'?'Baisse':'Neutre'}</span></div><div class="d">${esc(x.sum||'')}${x.link?'\n'+`<a href="${esc(x.link)}" target="_blank">Lien</a>`:''}</div><div class="d" style="margin-top:6px"><label><input type="checkbox" data-sent="${x.id}" ${x.sent?'checked':''}> Diapos envoyées au prof (jeudi 17 h)</label></div></div><div class="actions"><button data-editn="${x.id}">Modifier</button><button data-deln="${x.id}">Suppr.</button></div>`;
+    nl.appendChild(d);
+  });
+  // friday
+  $('#script').textContent=buildScript();
+  const fl=$('#fridayList'); const fr=[...state.fridays].sort((a,b)=>b.date.localeCompare(a.date));
+  fl.innerHTML=fr.length?'':'<div class="empty">Aucun vendredi marqué encore.</div>';
+  fr.forEach(f=>{const d=document.createElement('div');d.className='item';d.innerHTML=`<div class="when" style="font-size:13px">${dateFr(f.date)}</div><div class="body"><div class="d">${esc(f.text)}</div></div><div class="actions"><button data-editf="${f.date}">Modifier</button><button data-delf="${f.date}">Suppr.</button></div>`;fl.appendChild(d);});
+  // dues
+  const dl=$('#dueList'); dl.innerHTML=''; const today=new Date().toISOString().slice(0,10);
+  DUES.forEach(([d,t])=>{const el=document.createElement('div');const isDate=/^\d{4}/.test(d);const soon=isDate&&d>=today&&(new Date(d)-new Date(today))/864e5<=7;el.className='due'+(soon?' soon':'');el.innerHTML=`<div class="date">${isDate?new Date(d+'T12:00:00').toLocaleDateString('fr-CA',{weekday:'short',day:'numeric',month:'short'}):(d==='weekly'?'Chaque semaine':'À confirmer')}</div><div class="d">${t}</div>`;dl.appendChild(el);});
+  const next=DUES.find(([d])=>/^\d{4}/.test(d)&&d>=today);
+  $('#nextDue').textContent=next?new Date(next[0]+'T12:00:00').toLocaleDateString('fr-CA',{weekday:'long',day:'numeric',month:'long'})+' — '+next[1]:'Chaque jeudi 17 h : diapos si communiqué · chaque vendredi : rapport oral';
+  // final
+  const fc=$('#finalChecks'); fc.innerHTML='';
+  FINAL_SECTIONS.forEach(([t,d],i)=>{const el=document.createElement('div');el.className='check';el.innerHTML=`<input type="checkbox" data-final="${i}" ${state.finalDone[i]?'checked':''}><div><div class="t">${t}</div><div class="d">${d}</div></div>`;fc.appendChild(el);});
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+function buildScript(){
+  const c=state.company,s=series(),n=shares();
+  if(s.length<2) return 'Ajoute au moins une semaine dans Suivi pour générer ton rapport.';
+  const last=s[s.length-1],prev=s[s.length-2],first=s[0];
+  const val=n*last.price,gain=val-INVEST;
+  const pct=(a,b)=>((a-b)/b*100).toFixed(1).replace('.',',')+' %';
+  const recent=[...state.news].filter(x=>x.date>(prev.date||'')&&x.date<=(last.date||'9999')).sort((a,b)=>a.date.localeCompare(b.date));
+  let t=`Bonjour, je suis ${c.name||'ma compagnie'} (${c.code||''}), qui cherche ${c.sub||'…'}.\n\n`;
+  t+=`Cette semaine (${last.label}), l'action a clôturé à ${price(last.price)}, soit ${last.price>=prev.price?'une hausse':'une baisse'} de ${pct(last.price,prev.price)} par rapport à la semaine dernière, et ${last.price>=first.price?'+':''}${pct(last.price,first.price)} depuis le 11 septembre.\n\n`;
+  t+=`Mes ${n.toLocaleString('fr-CA')} actions valent maintenant ${money(val)}, donc ${gain>=0?'un gain':'une perte'} de ${money(Math.abs(gain))}.\n\n`;
+  t+=recent.length?`Communiqué${recent.length>1?'s':''} cette semaine : ${recent.map(x=>x.title+(x.sum?' — '+x.sum:'')).join(' | ')}\n\n`:`Aucun communiqué officiel cette semaine.\n\n`;
+  t+=last.note?`Explication : ${last.note}`:`Explication : (ajoute une note dans Suivi)`;
+  return t;
+}
+
+/* ---------- chart ---------- */
+function drawChart(){
+  const s=series(),n=shares(),W=600,H=260,pl=54,pr=18,pt=28,pb=40;
+  const wrap=$('#chart');
+  if(s.length<2){wrap.innerHTML='<div class="empty">Le graphique apparaît dès ta première semaine de suivi.</div>';return;}
+  const vals=s.map(p=>n*p.price);
+  let lo=Math.min(...vals,INVEST),hi=Math.max(...vals,INVEST);
+  const pad=(hi-lo)*0.18||500;lo-=pad;hi+=pad;
+  const x=i=>pl+i*(W-pl-pr)/(s.length-1), y=v=>pt+(hi-v)/(hi-lo)*(H-pt-pb);
+  const pts=vals.map((v,i)=>[x(i),y(v)]);
+  const path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=path+` L${pts[pts.length-1][0].toFixed(1)} ${y(lo)} L${pts[0][0]} ${y(lo)} Z`;
+  const up=vals[vals.length-1]>=INVEST, col=up?'var(--up)':'var(--down)';
+  let g=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Valeur de l'investissement par semaine">`;
+  // gridlines
+  const ticks=4;for(let k=0;k<=ticks;k++){const v=lo+(hi-lo)*k/ticks;g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#E3E8EB"/><text x="${pl-8}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#4A5A63">${Math.round(v/100)*100/1000}k</text>`;}
+  // baseline 10 000 $
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(INVEST)}" y2="${y(INVEST)}" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${W-pr}" y="${y(INVEST)-6}" font-size="11" text-anchor="end" fill="var(--gold)" font-weight="700">10 000 $</text>`;
+  g+=`<path d="${area}" fill="${col}" opacity=".08"/><path d="${path}" fill="none" stroke="${col}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  pts.forEach((p,i)=>{
+    const above=vals[i]>=vals[i-1]||i===0;
+    g+=`<circle cx="${p[0]}" cy="${p[1]}" r="5.5" fill="#fff" stroke="${col}" stroke-width="3"/>`;
+    g+=`<text x="${p[0]}" y="${p[1]+(above?-12:20)}" font-size="12" font-weight="700" text-anchor="middle" fill="#17242B">${money(vals[i])}</text>`;
+    g+=`<text x="${p[0]}" y="${H-pb+18}" font-size="12" text-anchor="middle" fill="#4A5A63" font-weight="600">${s[i].label}</text>`;
+    g+=`<text x="${p[0]}" y="${H-pb+32}" font-size="10" text-anchor="middle" fill="#8A969D">${price(s[i].price)}</text>`;
+  });
+  g+='</svg>';
+  wrap.innerHTML=g;
+}
+
+function drawPriceChart(){
+  const s=series(),W=600,H=330,pl=54,pr=18,pt=26,lineH=170,gap=30,barH=80;
+  const wrap=$('#chartPrice');
+  if(s.length<2){wrap.innerHTML='<div class="empty">Le graphique apparaît dès ta première semaine de suivi.</div>';return;}
+  const P=s.map(p=>p.price);
+  let lo=Math.min(...P),hi=Math.max(...P);const pad=(hi-lo)*0.2||0.05;lo=Math.max(0,lo-pad);hi+=pad;
+  const x=i=>pl+i*(W-pl-pr)/(s.length-1), y=v=>pt+(hi-v)/(hi-lo)*lineH;
+  const pts=P.map((v,i)=>[x(i),y(v)]);
+  const path=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  let g=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Prix de l'action par semaine">`;
+  for(let k=0;k<=3;k++){const v=lo+(hi-lo)*k/3;g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#E3E8EB"/><text x="${pl-8}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#4A5A63">${v.toFixed(2).replace('.',',')} $</text>`;}
+  // start price reference
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(P[0])}" y2="${y(P[0])}" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="5 4"/><text x="${W-pr}" y="${y(P[0])-6}" font-size="11" text-anchor="end" fill="var(--gold)" font-weight="700">départ ${price(P[0])}</text>`;
+  g+=`<path d="${path}" fill="none" stroke="#17242B" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  pts.forEach((p,i)=>{
+    const up=i===0||P[i]>=P[i-1];
+    g+=`<circle cx="${p[0]}" cy="${p[1]}" r="5.5" fill="#fff" stroke="#17242B" stroke-width="3"/>`;
+    g+=`<text x="${p[0]}" y="${p[1]+(up?-12:20)}" font-size="12" font-weight="700" text-anchor="middle" fill="#17242B">${price(P[i])}</text>`;
+  });
+  // bars: weekly variation
+  const b0=pt+lineH+gap, zero=b0+barH/2;
+  const chg=P.map((v,i)=>i?((v-P[i-1])/P[i-1]*100):0);
+  const mx=Math.max(5,...chg.map(Math.abs));
+  g+=`<text x="${pl}" y="${b0-8}" font-size="11" fill="#4A5A63" font-weight="600">Variation vs semaine précédente</text>`;
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${zero}" y2="${zero}" stroke="#B9C3C9"/>`;
+  const bw=Math.min(34,(W-pl-pr)/s.length*0.55);
+  chg.forEach((c,i)=>{
+    if(i===0){g+=`<text x="${x(0)}" y="${H-6}" font-size="12" text-anchor="middle" fill="#4A5A63" font-weight="600">S0</text>`;return;}
+    const h=Math.abs(c)/mx*(barH/2-4), col=c>=0?'var(--up)':'var(--down)';
+    g+=`<rect x="${x(i)-bw/2}" y="${c>=0?zero-h:zero}" width="${bw}" height="${h}" rx="4" fill="${col}"/>`;
+    g+=`<text x="${x(i)}" y="${c>=0?zero-h-5:zero+h+13}" font-size="11" font-weight="700" text-anchor="middle" fill="${col}">${c>=0?'+':''}${c.toFixed(1).replace('.',',')} %</text>`;
+    g+=`<text x="${x(i)}" y="${H-6}" font-size="12" text-anchor="middle" fill="#4A5A63" font-weight="600">${s[i].label}</text>`;
+  });
+  g+='</svg>';
+  wrap.innerHTML=g;
+}
+
+/* ---------- events ---------- */
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('section.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
+  window.scrollTo(0,0);
+});
+$('#cPrice').oninput=()=>{const p=parseFloat($('#cPrice').value);$('#cShares').value=p>0?Math.floor(INVEST/p).toLocaleString('fr-CA'):'';};
+$('#cSave').onclick=async()=>{
+  state.company={name:$('#cName').value.trim(),code:$('#cCode').value.trim(),sub:$('#cSub').value.trim(),proj:$('#cProj').value.trim(),site:$('#cSite').value.trim(),sedar:$('#cSedar').value.trim(),price:parseFloat($('#cPrice').value)||0,why:$('#cWhy').value.trim()};
+  render();await save('Fiche enregistrée');
+};
+document.querySelectorAll('[data-crit]').forEach(cb=>cb.onchange=async()=>{state.crit[cb.dataset.crit]=cb.checked;await save();});
+let editingWeek=null, editingNews=null;
+function setWeekMode(){const on=editingWeek!==null;$('#wFormTitle').textContent=on?'Modifier la semaine '+editingWeek:'Ajouter le prix de la semaine';$('#wAdd').textContent=on?'Mettre à jour':'Ajouter la semaine';$('#wCancel').style.display=on?'':'none';}
+function setNewsMode(){const on=editingNews!==null;$('#nFormTitle').textContent=on?'Modifier le communiqué':'Nouveau communiqué';$('#nAdd').textContent=on?'Mettre à jour':'Ajouter le communiqué';$('#nCancel').style.display=on?'':'none';}
+function clearWeekForm(){$('#wNum').value='';$('#wPrice').value='';$('#wNote').value='';$('#wDate').value='';editingWeek=null;setWeekMode();}
+function clearNewsForm(){$('#nTitle').value='';$('#nSum').value='';$('#nLink').value='';$('#nDate').value='';$('#nImpact').value='up';editingNews=null;setNewsMode();}
+$('#wAdd').onclick=async()=>{
+  const week=parseInt($('#wNum').value||$('#wNum').placeholder),p=parseFloat($('#wPrice').value);
+  if(!(p>0)){toast('Entre un prix valide');return;}
+  if(editingWeek!==null) state.weeks=state.weeks.filter(w=>w.week!==editingWeek);
+  state.weeks=state.weeks.filter(w=>w.week!==week);
+  state.weeks.push({week,date:$('#wDate').value,price:p,note:$('#wNote').value.trim()});
+  const wasEdit=editingWeek!==null; clearWeekForm();
+  render();await save(wasEdit?'Semaine '+week+' mise à jour':'Semaine '+week+' ajoutée');
+};
+$('#wCancel').onclick=clearWeekForm;
+$('#nAdd').onclick=async()=>{
+  const title=$('#nTitle').value.trim();if(!title){toast('Entre un titre');return;}
+  const rec={date:$('#nDate').value||new Date().toISOString().slice(0,10),title,sum:$('#nSum').value.trim(),link:$('#nLink').value.trim(),impact:$('#nImpact').value};
+  if(editingNews!==null){const x=state.news.find(n=>n.id===editingNews);if(x)Object.assign(x,rec);}
+  else state.news.push(Object.assign({id:Date.now(),sent:false},rec));
+  const wasEdit=editingNews!==null; clearNewsForm();
+  render();await save(wasEdit?'Communiqué mis à jour':'Communiqué ajouté');
+};
+$('#nCancel').onclick=clearNewsForm;
+$('#fAdd').onclick=async()=>{
+  const d=new Date().toISOString().slice(0,10);
+  state.fridays=state.fridays.filter(f=>f.date!==d);
+  state.fridays.push({date:d,text:buildScript().split('\n\n').slice(1,3).join(' ')});
+  render();await save('Vendredi enregistré');
+};
+$('#copyScript').onclick=async()=>{try{await navigator.clipboard.writeText($('#script').textContent);toast('Texte copié');}catch(e){toast('Sélectionne et copie le texte');}};
+document.addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.editw){const w=state.weeks.find(w=>String(w.week)===b.dataset.editw);if(w){editingWeek=w.week;$('#wNum').value=w.week;$('#wDate').value=w.date||'';$('#wPrice').value=w.price;$('#wNote').value=w.note||'';setWeekMode();$('#wFormTitle').scrollIntoView({behavior:'smooth',block:'start'});}}
+  if(b.dataset.editn){const x=state.news.find(n=>String(n.id)===b.dataset.editn);if(x){editingNews=x.id;$('#nDate').value=x.date;$('#nTitle').value=x.title;$('#nSum').value=x.sum||'';$('#nLink').value=x.link||'';$('#nImpact').value=x.impact;setNewsMode();$('#nFormTitle').scrollIntoView({behavior:'smooth',block:'start'});}}
+  if(b.dataset.editf){const f=state.fridays.find(f=>f.date===b.dataset.editf);if(f){const t=prompt('Modifier le résumé du vendredi :',f.text);if(t!==null){f.text=t.trim();render();await save('Vendredi mis à jour');}}}
+  if(b.dataset.delw){if(!confirm('Supprimer la semaine '+b.dataset.delw+' ?'))return;state.weeks=state.weeks.filter(w=>String(w.week)!==b.dataset.delw);if(editingWeek!==null&&String(editingWeek)===b.dataset.delw)clearWeekForm();render();await save('Semaine supprimée');}
+  if(b.dataset.deln){if(!confirm('Supprimer ce communiqué ?'))return;state.news=state.news.filter(x=>String(x.id)!==b.dataset.deln);if(editingNews!==null&&String(editingNews)===b.dataset.deln)clearNewsForm();render();await save('Communiqué supprimé');}
+  if(b.dataset.delf){state.fridays=state.fridays.filter(f=>f.date!==b.dataset.delf);render();await save();}
+});
+document.addEventListener('change',async e=>{
+  const t=e.target;
+  if(t.dataset.sent){const x=state.news.find(n=>String(n.id)===t.dataset.sent);if(x){x.sent=t.checked;await save();}}
+  if(t.dataset.final){state.finalDone[t.dataset.final]=t.checked;await save();}
+});
+$('#btnExport').onclick=()=>{const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(state,null,2));a.download='suivi-gitologie.json';a.click();};
+$('#btnImport').onclick=()=>$('#fileImport').click();
+$('#fileImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=async()=>{try{state=Object.assign(blank(),JSON.parse(r.result));render();await save('Copie restaurée');}catch(err){toast('Fichier invalide');}};r.readAsText(f);};
+$('#btnReset').onclick=async()=>{if(confirm('Effacer toutes les données du projet ?')){state=blank();render();await save('Données effacées');}};
+
+/* ---------- exemple fictif (5 semaines) ---------- */
+function demoState(){
+  return {
+    company:{name:'Exploration Boréale (exemple fictif)',code:'EXB – TSX.V',sub:'Or',
+      proj:'Projet Lac Caribou (Abitibi, près de Val-d\'Or) — forage en cours\nProjet Eastmain Nord (Baie-James) — levés géophysiques',
+      site:'https://exemple-fictif.ca',sedar:'Oui — rapport 43-101 (2025) sur SEDAR+',price:0.42,
+      why:'Or dans la ceinture de l\'Abitibi, compagnie active avec un programme de forage annoncé pour l\'automne, et un projet Baie-James exploré par géophysique.'},
+    crit:[true,true,true,true,true],
+    weeks:[
+      {week:1,date:'2026-09-18',price:0.44,note:'Peu de nouvelles. Légère hausse avec le prix de l\'or qui monte.'},
+      {week:2,date:'2026-09-25',price:0.55,note:'Communiqué du 22 sept. : 12 m à 5,2 g/t Au au forage LC-26-04. Le marché réagit fort à cette intersection.'},
+      {week:3,date:'2026-10-02',price:0.50,note:'Pas de communiqué. Prise de profits après la hausse de la semaine 2 : typique des juniors.'},
+      {week:4,date:'2026-10-09',price:0.39,note:'Communiqué du 6 oct. : financement privé à 0,40 $ (dilution). L\'action tombe vers le prix du placement.'},
+      {week:5,date:'2026-10-16',price:0.47,note:'Communiqué du 14 oct. : levé magnétique à Eastmain Nord identifie 3 nouvelles cibles. Rebond de l\'action.'},
+    ],
+    news:[
+      {id:1,date:'2026-09-22',title:'Résultats de forage au projet Lac Caribou',sum:'Le sondage LC-26-04 recoupe 12 m à 5,2 g/t Au dans une zone de cisaillement, à 120 m sous la surface. Confirme l\'extension de la minéralisation vers l\'est.',link:'',impact:'up',sent:true},
+      {id:2,date:'2026-10-06',title:'Clôture d\'un placement privé de 3 M$',sum:'Émission de 7,5 M d\'actions à 0,40 $. Les fonds serviront à un programme de 5 000 m de forage cet hiver.',link:'',impact:'down',sent:true},
+      {id:3,date:'2026-10-14',title:'Levé magnétique héliporté à Eastmain Nord',sum:'Le levé identifie trois anomalies magnétiques coïncidant avec des contacts volcano-sédimentaires. Échantillonnage prévu avant la neige.',link:'',impact:'up',sent:false},
+    ],
+    fridays:[
+      {date:'2026-09-18',text:'S1 : 0,44 $, +476 $. Peu de nouvelles, suit l\'or.'},
+      {date:'2026-09-25',text:'S2 : 0,55 $, +3 095 $. Forage 12 m à 5,2 g/t Au.'},
+      {date:'2026-10-02',text:'S3 : 0,50 $, +1 904 $. Prise de profits.'},
+      {date:'2026-10-09',text:'S4 : 0,39 $, −714 $. Financement dilutif à 0,40 $.'},
+    ],
+    finalDone:[true,true,false,false,false,false],
+  };
+}
+async function loadDemo(){state=demoState();clearWeekForm();clearNewsForm();render();await save('Exemple chargé — données fictives');document.querySelector('nav button[data-v=accueil]').click();}
+$('#btnDemo1').onclick=loadDemo;
+$('#btnDemo2').onclick=loadDemo;
+
+load().then(render);
+</script>
+</body>
+</html>
